@@ -10,7 +10,7 @@
 #define SET_BIT(reg, idx)	reg = (reg | (1 << idx))		// Macro que seta o bit idx do registrador reg
 
 //Ativa o Systick
-void Start_systick(void){	
+void Start_Timer(void){	
 	SYST_CSR = 0x00000007;
 	SYST_RVR = 0x33333;
 	//SYST_RVR = 0x99999;
