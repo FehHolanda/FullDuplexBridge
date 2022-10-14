@@ -16,6 +16,7 @@ que enviou.
 #include "intrpt.h"
 #include "buffer.h"
 #include "structs.h"
+#include "interruptions.h"
 
 #define SET_BIT(reg, idx)	reg = (reg | (1 << idx))		// Macro que seta o bit idx do registrador reg.
 
@@ -71,7 +72,7 @@ int main(void) {
 	//esperando habilitar conexao
 	while(!conect){
 		if(try_conect && !request && j) {
-			putchar_UART2('0',1);			//envia pedido de conexao
+			putchar_UART2('0');			//envia pedido de conexao
 			try_conect=0;
 			j=0;
 		}
@@ -83,7 +84,7 @@ int main(void) {
 		}
 		
 		if(acept){
-			putchar_UART2('0',2);			//envia confirmaþÒo de conexao
+			putchar_UART2('0');			//envia confirmaþÒo de conexao
 			puts_UART0(text3);
 			conect=1;
 		}
@@ -141,22 +142,10 @@ void UART2_IRQHandler(){
 	
 	if (UART2_S1 & UART_S1_RDRF_MASK){					
 		f =	UART2_D;	
-		if(!control){			
-			getchar_UART2(0,f);								//Salva parte flags do header
-			test_twh();
-			control=1;
-			//while(sis && sis!=2);sis=0;									//ve se a transmissao nao esta usando o sistick
-			//Start_systick();
-		}
-		
-		else if(control){
-			cont_rec++;
-			//Salva parte dado do header
-			if(getchar_UART2(type,f))putchar_UART2('0',0);	//Certifica id e salva no buffer se for tipo2
-			control = 0;
-			confirm_cmd();									//aplica comandos
-			}						
-		}
+
+
+
+	}
 
 /*-----------------------------------------------------------------------------------------------------------------------------------------------*/	
 	
@@ -169,33 +158,12 @@ void UART2_IRQHandler(){
 				UART2_C2 = 0x2c;
 			}
 		else{
-				if(!p){
-					UART2_D = buffer_out.Buff[buffer_out.index_start]; // envia caracter DO BUFFER a ser transmitido	
-					z = buffer_out.Buff[buffer_out.index_start];
-					test_z(z);
-					p=1;
-				}
-				else if(p){
-					UART2_D = buffer_out.Buff[buffer_out.index_start+1]; // envia caracter DO BUFFER a ser transmitido
-					p=0;
-					UART2_C2 = 0x2c;									// desabilito interrupþÒo;
-					while(!sis && sis!=2);sis=1;
-					Start_systick();										//habilito timeout
-					confirm_erase=1;
-				}
+				
+
 								
 		}
 	}
-	if(rec_confirmed && confirm_erase){
-		buffer_remove(&buffer_out);								//atualiza buffer					
-		buffer_remove(&buffer_out);								//atualiza buffer
-		rec_confirmed =0;
-		confirm_erase=0;
-//		if(buffer_out.empty){											//Se o buffer estiver vazio desabilita transmissao
-//			UART2_C2 = 0x2c;
-//		}
-		
-	}	
+	
 }
 /*-----------------------------------------------------------------------------------------------------------------------------------------------*/	
 
@@ -214,18 +182,10 @@ void SysTick_Handler(){
 	if(n==10){
 		SYST_CSR = 0x00000006;
 		n=0;
-		
-		if(!sis){
-			sis=2;
-			if(cont_rec==cont_rec_last)control=0;
-			else cont_rec_last=cont_rec;
-		}	
-		
-		if(sis){
-			sis=2;
-			UART2_C2 = 0xAc;
-		}
+	
+		event_type Timeout = timeout;
 	}
+
 	else;
 	
 	return;

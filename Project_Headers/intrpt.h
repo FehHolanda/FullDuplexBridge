@@ -8,7 +8,7 @@
 #ifndef INTRPT_H_
 #define INTRPT_H_
 
-void Start_systick(void);
+void Start_Timer(void);
 void init_IRQA(void);
 void nvic_config(void);
 void init_NMI(void);
