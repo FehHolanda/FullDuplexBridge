@@ -142,11 +142,9 @@ void UART2_IRQHandler(){
 	
 	if (UART2_S1 & UART_S1_RDRF_MASK){					
 		f =	UART2_D;	
-
-
+	
 
 	}
-
 /*-----------------------------------------------------------------------------------------------------------------------------------------------*/	
 	
 	
@@ -158,12 +156,35 @@ void UART2_IRQHandler(){
 				UART2_C2 = 0x2c;
 			}
 		else{
-				
-
+				if(!p){
+					UART2_D = buffer_out.Buff[buffer_out.index_start]; // envia caracter DO BUFFER a ser transmitido	
+					z = buffer_out.Buff[buffer_out.index_start];
+					test_z(z);
+					p=1;
+				}
+				else if(p){
+					UART2_D = buffer_out.Buff[buffer_out.index_start+1]; // envia caracter DO BUFFER a ser transmitido
+					p=0;
+					UART2_C2 = 0x2c;									// desabilito interrupþÒo;
+					while(!sis && sis!=2);sis=1;
+					Start_systick();										//habilito timeout
+					confirm_erase=1;
+				}
 								
 		}
 	}
+
 	
+	if(rec_confirmed && confirm_erase){
+		buffer_remove(&buffer_out);								//atualiza buffer					
+		buffer_remove(&buffer_out);								//atualiza buffer
+		rec_confirmed =0;
+		confirm_erase=0;
+//		if(buffer_out.empty){											//Se o buffer estiver vazio desabilita transmissao
+//			UART2_C2 = 0x2c;
+//		}
+		
+	}	
 }
 /*-----------------------------------------------------------------------------------------------------------------------------------------------*/	
 
@@ -182,10 +203,18 @@ void SysTick_Handler(){
 	if(n==10){
 		SYST_CSR = 0x00000006;
 		n=0;
-	
-		event_type Timeout = timeout;
+		
+		if(!sis){
+			sis=2;
+			if(cont_rec==cont_rec_last)control=0;
+			else cont_rec_last=cont_rec;
+		}	
+		
+		if(sis){
+			sis=2;
+			UART2_C2 = 0xAc;
+		}
 	}
-
 	else;
 	
 	return;

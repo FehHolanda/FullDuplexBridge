@@ -1,7 +1,6 @@
 /* Protocol 3 (par) allows unidirectional data flow over an unreliable channel. */
 
 #define MAX_SEQ 1	/* must be 1 for protocol 3 */
-typedef enum  {frame_arrival, cksum_err, timeout} event_type;
 #include "protocol.h"
 
 void sender3(void)

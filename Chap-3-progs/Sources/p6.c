@@ -4,7 +4,7 @@
 
 #define MAX_SEQ 7	/* should be 2^n - 1 */
 #define NR_BUFS ((MAX_SEQ + 1)/2)
-typedef enum {frame_arrival, cksum_err, timeout, network_layer_ready, ack_timeout} event_type;
+
 #include "protocol.h"
 boolean no_nak = true;	/* no nak has been sent yet */
 seq_nr oldest_frame = MAX_SEQ+1;	/* init value is for the simulator */

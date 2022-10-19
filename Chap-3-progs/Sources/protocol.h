@@ -1,9 +1,14 @@
+
+#ifndef _PROTOCOL_H_
+#define _PROTOCOL_H_
+
 #define MAX_PKT 4	/* determines packet size in bytes */
 
 typedef enum {false, true} boolean;	/* boolean type */
 typedef unsigned int seq_nr;	/* sequence or ack numbers */
 typedef struct {unsigned char data[MAX_PKT];} packet;	/* packet definition */
 typedef enum {data, ack, nak} frame_kind;	/* frame_kind definition */
+typedef enum {frame_arrival, cksum_err, timeout, network_layer_ready, ack_timeout} event_type;
 
 typedef struct {	/* frames are transported in this layer */
   frame_kind kind;	/* what kind of a frame is it? */
@@ -11,6 +16,7 @@ typedef struct {	/* frames are transported in this layer */
   seq_nr ack;   	/* acknowledgement number */
   packet info;  	/* the network layer packet */
 } frame;
+
 
 /* Wait for an event to happen; return its type in event. */
 void wait_for_event(event_type *event);
@@ -47,3 +53,6 @@ void disable_network_layer(void);
 
 /* Macro inc is expanded in-line: Increment k circularly. */
 #define inc(k) if (k < MAX_SEQ) k = k + 1; else k = 0
+
+
+#endif

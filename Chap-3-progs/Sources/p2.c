@@ -4,8 +4,8 @@
    capacity and a finite procesing speed, so the protocol must explicitly prevent 
    the sender from flooding the receiver with data faster than it can be handled. */
 
-typedef enum {frame_arrival} event_type;
 #include "protocol.h"
+#define MAX_SEQ 1
 
 void sender2(void)
 {

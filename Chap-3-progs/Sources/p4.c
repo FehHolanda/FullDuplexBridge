@@ -1,7 +1,6 @@
 /* Protocol 4 (sliding window) is bidirectional and is more robust than protocol 3. */
 
 #define MAX_SEQ 1	/* must be 1 for protocol 4 */
-typedef enum {frame_arrival, cksum_err, timeout} event_type;
 #include "protocol.h"
 
 void protocol4 (void)

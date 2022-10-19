@@ -4,7 +4,6 @@
    network layer causes a network_layer_ready event when there is a packet to send. */
 
 #define MAX_SEQ 7	/* should be 2^n - 1 */
-typedef enum {frame_arrival, cksum_err, timeout, network_layer_ready} event_type;
 #include "protocol.h"
 
 static boolean between(seq_nr a, seq_nr b, seq_nr c)
