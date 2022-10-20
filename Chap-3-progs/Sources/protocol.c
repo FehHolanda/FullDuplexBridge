@@ -43,11 +43,7 @@ void to_physical_layer(frame *s){
 
 
     //feedback
-    feedback.ack = s->ack;
-    feedback.info = s->info;
-    feedback.kind = s->kind;
-    feedback.seq = s->seq;
-
+    feedback = *s;
     receiver1();
 }
 
