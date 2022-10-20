@@ -5,14 +5,16 @@ void sender1()
 {
   frame s;	/* buffer for an outbound frame */
   packet buffer;	/* buffer for an outbound packet */
-  boolean flag = true;
 
-  while (flag) {
+  for (int i=0;i<2;i++) {
         from_network_layer(&buffer);	/* go get something to send */
         s.info = buffer;	/* copy it into s for transmission */
         to_physical_layer(&s);	/* send it on its way */
+       
+       
+       //feedback
+        receiver1();
   
-       flag = false;
   }	/* tomorrow, and tomorrow, and tomorrow,
  	   Creeps in this petty pace from day to day
 	   To the last syllable of recorded time;

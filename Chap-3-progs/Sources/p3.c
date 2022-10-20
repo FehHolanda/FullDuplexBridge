@@ -2,6 +2,8 @@
 
 #define MAX_SEQ 1	/* must be 1 for protocol 3 */
 #include "protocol.h"
+#include "p3.h"
+#include <stdio.h>
 
 void sender3(void)
 {
@@ -12,11 +14,15 @@ void sender3(void)
 
   next_frame_to_send = 0;	/* initialize outbound sequence numbers */
   from_network_layer(&buffer);	/* fetch first packet */
-  while (true) {
+   for (int i =0;i<3;i++) {
         s.info = buffer;	/* construct a frame for transmission */
         s.seq = next_frame_to_send;	/* insert sequence number in frame */
         to_physical_layer(&s);	/* send it on its way */
         start_timer(s.seq);	/* if answer takes too long, time out */
+
+        //feedback
+        receiver3();
+
         wait_for_event(&event);	/* frame_arrival, cksum_err, timeout */
         if (event == frame_arrival) {
                 from_physical_layer(&s);	/* get the acknowledgement */
@@ -35,8 +41,11 @@ void receiver3(void)
   event_type event;
 
   frame_expected = 0;
-  while (true) {
+  boolean control = true;
+
+  while (control) {
         wait_for_event(&event);	/* possibilities: frame_arrival, cksum_err */
+
         if (event == frame_arrival) {
                 /* A valid frame has arrived. */
                 from_physical_layer(&r);	/* go get the newly arrived frame */
@@ -48,5 +57,6 @@ void receiver3(void)
                 s.ack = 1 - frame_expected;	/* tell which frame is being acked */
                 to_physical_layer(&s);	/* only the ack field is use */
         }
+        control = false; 
   }
 }

@@ -6,11 +6,12 @@
 
 #include <stdio.h>
 #include "p1.h"
+#include "p2.h"
+#include "p3.h"
 
 int main(void) {
   
-      printf("Found youuu\n");
-      sender1();
+      sender3();
 }
 
 
