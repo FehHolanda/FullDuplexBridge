@@ -1,6 +1,9 @@
 
 #include "protocol.h"
 #include <stdio.h>
+#include "p1.h"
+
+frame feedback;
 
 
 void wait_for_event(event_type *event){
@@ -10,14 +13,15 @@ void wait_for_event(event_type *event){
 /* Fetch a packet from the network layer for transmission on the channel. */
 void from_network_layer(packet *p){
 
-    for(int i=0;i<MAX_PKT;i++) p->data[i] = i+10;
-    
+    for(int i=0;i<MAX_PKT;i++) p->data[i] = 26;
+        
 }
 
 /* Deliver information from an inbound frame to the network layer. */
 void to_network_layer(packet *p){
 
-        for(int i=0;i<MAX_PKT;i++) printf("%d \n",p->data[i]);
+    printf("\nMensagem Recebida:\n");
+    for(int i=0;i<MAX_PKT;i++) printf("%d \n",p->data[i]);
 
 }
 
@@ -26,16 +30,25 @@ void from_physical_layer(frame *r){
 
     r->ack=0;
     r->seq=0;
-    for(int i=0;i<MAX_PKT;i++) r->info.data[i] = i+30;
+    r->info = feedback.info;
 
 }
 
 /* Pass the frame to the physical layer for transmission. */
 void to_physical_layer(frame *s){
 
+    printf("\nMensagem Enviada:\n");
     printf("ACK:%d\nSEQ:%d\n",s->ack,s->seq);
     for(int i=0;i<MAX_PKT;i++) printf("%d \n",s->info.data[i]);
 
+
+    //feedback
+    feedback.ack = s->ack;
+    feedback.info = s->info;
+    feedback.kind = s->kind;
+    feedback.seq = s->seq;
+
+    receiver1();
 }
 
 /* Start the clock running and enable the timeout event. */
