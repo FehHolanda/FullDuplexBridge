@@ -5,8 +5,8 @@
  *      Author: ea871
  */
 
-#include "derivative.h" /* include peripheral declarations */
-#include "ports.h"
+#include "../Project_Headers/derivative.h" /* include peripheral declarations */
+#include "../Project_Headers/ports.h"
 #define SET_BIT(reg, idx)	reg = (reg | (1 << idx))		// Macro que seta o bit idx do registrador reg
 
 //Ativa o Systick

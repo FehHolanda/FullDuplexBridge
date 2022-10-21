@@ -5,15 +5,14 @@
  *      Author: ea871
  */
 
-#include "derivative.h" /* include peripheral declarations */
-#include "structs.h"
-#define SET_BIT(reg, idx)	reg = (reg | (1 << idx))		// Macro que seta o bit idx do registrador reg
+#include "../Project_Headers/derivative.h" /* include peripheral declarations */
+#include "../Project_Headers/structs.h"
 
 Buffer *bufr;
 
 void init_buffer(Buffer *buf){
 	bufr = buf;
-	(*bufr).size=50;
+	(*bufr).size=80;
 	(*bufr).full= false;
 	(*bufr).empty= true;
 	(*bufr).index_start=0;

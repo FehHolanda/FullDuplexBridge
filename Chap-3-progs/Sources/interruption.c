@@ -4,7 +4,7 @@
 #include "protocol.h"
  
 volatile sig_atomic_t gSignalStatus;
-extern boolean event_ready; 
+boolean event_ready; 
 
 
 void signal_handler(int signal)

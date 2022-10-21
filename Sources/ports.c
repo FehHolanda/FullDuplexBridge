@@ -1,6 +1,6 @@
 //biblioteca de ativamento dos System Clock Gating Control(SCGC) e MUX
 
-#include "derivative.h" /* include peripheral declarations */
+#include "../Project_Headers/derivative.h" /* include peripheral declarations */
 #define SET_BIT(reg, idx)	reg = (reg | (1 << idx))		// Macro que seta o bit idx do registrador reg
 
 /*

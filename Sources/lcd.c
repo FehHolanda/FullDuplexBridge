@@ -6,9 +6,10 @@
  */
 /* Felipe de Holanda Carvalho 	Ra:171004*/
 
-#include "derivative.h" /* include peripheral declarations */
-#include "delay.h"
-#include "ports.h"
+#include "../Project_Headers/derivative.h" /* include peripheral declarations */
+#include "../Project_Headers/delay.h"
+#include "../Project_Headers/ports.h"
+#include "../Project_Headers/lcd.h"
 #define SET_BIT(reg, idx)	reg = (reg | (1 << idx))		// Macro que seta o bit idx do registrador reg
 
 //inicia e configura as portas do microcontrolador
@@ -31,7 +32,7 @@ void init_LCD(void){
 	return;
 }
 
-//Função que executa o pulos de ENABLE
+//Funï¿½ï¿½o que executa o pulos de ENABLE
 void Enable(void){
 	SET_BIT(GPIOC_PSOR, 9);		//enable on
 	SET_BIT(GPIOC_PCOR, 9);		//enable off
@@ -101,10 +102,10 @@ void puts_LCD(unsigned char *word){
 		
 		//rotina para Strings maiores que o total de posicoes do display
 		if(i>=32){			
-			setpos_LCD(1,p);					//seleciona a posição fantasma(17) do diplay
-			putchar_LCD(word[p-1]);				//Salva na posição fantasma	o primeiro caracter da linha 2
+			setpos_LCD(1,p);					//seleciona a posiï¿½ï¿½o fantasma(17) do diplay
+			putchar_LCD(word[p-1]);				//Salva na posiï¿½ï¿½o fantasma	o primeiro caracter da linha 2
 			putcmd_LCD(0b0000011000,40);		//Shift no display
-			setpos_LCD(2,p);					//seleciona a ultima posição da segunda linha	
+			setpos_LCD(2,p);					//seleciona a ultima posiï¿½ï¿½o da segunda linha	
 			putchar_LCD(word[i]);				//escreve na ultima posicao
 			p++;								// implementa a variavel auxiliar
 		}		
