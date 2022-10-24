@@ -40,24 +40,19 @@ void init_UART2(void){
 
 void getchar_terminal(unsigned char c,Buffer *buffer_in){
 	
-	putchar_serial(c,buffer_in);										
+									
 
 	return;
 }
 
 int getchar_serial(unsigned char c, Buffer *buffer_in){
-	
-	while(buffer_in->full);										//se n�o estiver cheio
-	buffer_in->Buff[buffer_in->index_end]=c; 						// envia caracter para o buffer		
-	buffer_add(buffer_in);										//atualiza buffer ;
-	UART0_C2 = 0xAC;
-	return 0;
+
 }
 
-void putchar_terminal(unsigned char c, Buffer *buffer_in){
-	while(buffer_in->full);										//se n�o estiver cheio		
-	buffer_in->Buff[buffer_in->index_end]=c; 						// envia caracter para o buffer		
-	buffer_add(buffer_in);										//atualiza buffer ;
+void putchar_terminal(unsigned char c, Buffer *buffer_out){
+	while(buffer_out->full);										//se n�o estiver cheio		
+	buffer_out->Buff[buffer_out->index_end]=c; 						// envia caracter para o buffer		
+	buffer_add(buffer_out);										//atualiza buffer ;
 	UART0_C2 = 0xAC;											//ativa transmissao na UART0	
 	return;
 }
@@ -77,6 +72,7 @@ void putchar_serial(unsigned char c, Buffer *buffer_out){
 	UART2_C2 = 0xAC;											//ativa transmissao
 	return;
 }
+
 void puts_serial(unsigned char *s, Buffer *buffer_out){
 	int i=0;
 	while(s[i]!='\0'){

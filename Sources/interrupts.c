@@ -16,10 +16,18 @@ Buffer buffer_in_terminal;
 Buffer buffer_out_terminal;
 Buffer buffer_in_Serial;
 Buffer buffer_out_Serial;
+
 boolean event_ready;
 boolean stoped_timer;
+boolean chat_ready;
+
 event_type event_save;
+
 int countimer;
+int cont=0;
+int frame_test[MAX_PKT+1];
+int checksum = 0;
+
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -52,14 +60,35 @@ void UART0_IRQHandler(){
 
 /*  REDE DE COMUNICAÇÂO  */
 void UART2_IRQHandler(){
-	int z;
 	unsigned char f;
-	
+	int aux[MAX_PKT];		
 		
 /*--------------------------------------------------------recepcao UART2*-------------------------------------------------------------------------*/
-	if (UART2_S1 & UART_S1_RDRF_MASK){					
-		f =	UART2_D;
-		putchar_serial(f,&buffer_in_Serial);											
+	if (UART2_S1 & UART_S1_RDRF_MASK){	
+		f =	UART2_D;			
+	
+		 /*CHECK SUM*/
+		
+		if(cont<MAX_PKT+1) {
+			aux[cont] = f;
+			if(cont>1) checksum += f;
+			cont++;
+		}
+
+		else{
+				if(checksum == f) {
+					event_save = frame_arrival;
+					for(int i =0;i<MAX_PKT+1;i++) putchar_serial(aux[i],&buffer_in_Serial);
+					putchar_serial(checksum,&buffer_in_Serial);
+				}
+			
+				else event_save = cksum_err; 
+			
+			cont=0;
+			checksum = 0;
+			event_ready = true;
+			
+		}
 	}
 /*-----------------------------------------------------------------------------------------------------------------------------------------------*/	
 	
@@ -71,7 +100,7 @@ void UART2_IRQHandler(){
 		else{
 				
 			UART2_D = buffer_out_Serial.Buff[buffer_out_Serial.index_start]; 			//envia caracter DO BUFFER a ser transmitido	
-			z = buffer_out_Serial.Buff[buffer_out_Serial.index_start];								
+			buffer_remove(&buffer_out_Serial);								
 		}
 	}		
 }
@@ -82,7 +111,7 @@ void NMI_Handler(){
 }
 
 void PORTA_IRQHandler(){	
-	
+		
 	return;
 }
 

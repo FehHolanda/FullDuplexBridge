@@ -20,8 +20,6 @@ void sender3(void)
         to_physical_layer(&s);	/* send it on its way */
         start_timer(s.seq);	/* if answer takes too long, time out */
 
-       
-
         wait_for_event(&event);	/* frame_arrival, cksum_err, timeout */
         if (event == frame_arrival) {
                 from_physical_layer(&s);	/* get the acknowledgement */

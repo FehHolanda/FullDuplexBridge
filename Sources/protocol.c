@@ -23,8 +23,9 @@ void wait_for_event(event_type *event){
 
 /* Fetch a packet from the network layer for transmission on the channel. */
 void from_network_layer(packet *p){
-
-    for(int i=0;i<MAX_PKT;i++) p->data[i] = id;
+    p->data[MAX_PKT-1] = 0;
+    for(int i=0;i<MAX_PKT-1;i++) p->data[i] = id;
+     p->data[MAX_PKT-1] += id; 
     id++;
     /*
     p->data[MAX_PKT-1] = 0; 
@@ -49,26 +50,15 @@ void to_network_layer(packet *p){
 
 /* Go get an inbound frame from the physical layer and copy it to r. */
 void from_physical_layer(frame *r){
-    int check_sum=0,aux;
-
-
+    
     r->ack = buffer_in_Serial.Buff[buffer_in_Serial.index_start];
     buffer_remove(&buffer_in_Serial);
     r->ack = 0;
     buffer_remove(&buffer_in_Serial);
     for(int i=0;i<MAX_PKT;i++) {
-        aux = buffer_in_Serial.Buff[buffer_in_Serial.index_start];
-        r->info.data[i] = aux;
-        check_sum += aux;
+         r->info.data[i] = buffer_in_Serial.Buff[buffer_in_Serial.index_start];
         buffer_remove(&buffer_in_Serial);
-    }
-
-    if(check_sum = 2*aux) event_save = frame_arrival;
-    
-    else event_save = cksum_err; 
-    
-    event_ready = true;
-
+    }  
 }
 
 /* Pass the frame to the physical layer for transmission. */

@@ -1,12 +1,6 @@
 /*Projeto
-//Felipe de Holanda Carvalho 		R.A:171004 
 
-DescrissÒo:
-O projeto tem como finalidade a transmissÒo entre dois microcontroladores... para isso usamos a Uart0 para comunicaþ§a com o terminal e a Uart2 para comunicaþÒo
-com o micontrolador.
-A comunicaþÒo se dß por um protocolo onde monto uma struct header, ela contem flag e dado , envio esses dois dados seguidos pela Uart2, por sua vez o outro
-microcontrolador recebe esses dados e pelo item flag determina se o dado Ú de fato um dado ou um comando., e manda uma confirmaþÒo de recebimento para o microcontrolador
-que enviou.
+
 */
 
 #include "Project_Headers/derivative.h" /* include peripheral declarations */
@@ -33,6 +27,8 @@ extern Buffer buffer_in_terminal;
 extern Buffer buffer_out_terminal;
 extern Buffer buffer_in_Serial;
 extern Buffer buffer_out_Serial;
+
+extern boolean chat_ready;
 
 //strings 
 unsigned char text0[] = "Bem vindo \n\r";
@@ -64,7 +60,8 @@ int main(void) {
 	//ativar as condicoes iniciais.
 	Clear_ALL();
 	puts_terminal(text0,&buffer_out_terminal);
-	//puts_UART0(text1);
+	
+	//while(chat_ready);
 	
 		
 
